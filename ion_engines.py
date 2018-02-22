@@ -17,8 +17,9 @@ Ion.add_tech(KTech("colonization2150ElecProp",  2150))
 
 # This is basically a macro we use to create several similar parts
 def NFP_Ion_Engine(name, year):
+    # Title is apparently "stored in NearFuture Configs"
     # We have no descriptions, costs, or entryCosts for these (presumably they come from NF configs too)
-    return KPart(name, "(stored in NearFuture Configs)", None, None, None,
+    return KPart(name, None, None, None, None,
                  mod=NFP, year=year, category=Ion)
 
 NASA_457M_V1    = NFP_Ion_Engine("NASA-457M-V1",    2000)
