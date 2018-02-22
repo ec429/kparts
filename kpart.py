@@ -70,12 +70,6 @@ class EngineConfig(object):
         body = ['%%techRequired = %s' % (self.tech,)]
         if self.cost is not None:
             body.append('%%cost = %d' % (self.cost,))
-        ## these entryCosts actually go in ECM-Engines.cfg
-        #if self.entry_cost is not None:
-        #    if isinstance(self.entry_cost, tuple):
-        #        body.append('%%entryCost = %s' % map(str, self.entry_cost))
-        #    else:
-        #        body.append('%%entryCost = %d' % (self.entry_cost,))
         if self.description:
             body.append('%%description = %s' % (self.description,))
         if self.upgrade:
@@ -100,6 +94,12 @@ class EngineConfig(object):
             body.append('title = (Unused) Engine Upgrade: %s Config' % (self.name,))
             body.append('description = (Unused)%s' % ('\\n\\n' + self.description if self.description else '',))
         return "PARTUPGRADE\n{\n%s\n}" % ('\n'.join('\t' + line for line in body),)
+    def make_ecm(self):
+        if isinstance(self.entry_cost, tuple):
+            ec = ', '.join(map(str, self.entry_cost))
+        else:
+            ec = str(self.entry_cost)
+        return '\t%s = %s' % (self.name, ec)
     def __str__(self):
         return self.name
 
@@ -159,5 +159,31 @@ class KPart(object):
         if self.category:
             return self.category.tech(self.year)
         return unlockParts
+    def make_tree(self):
+        body = ['%%techRequired = %s' % (self.tech,)]
+        if self.cost is not None:
+            body.append('%%cost = %d' % (self.cost,))
+        if self.entry_cost is not None:
+            body.append('%%entryCost = %d' % (self.entry_cost,))
+        body.append('RP0conf = %s' % ('true' if self.rp0 else 'false',))
+        if self.mod is not None:
+            body.append('@description ^=:$: <b><color=green>From %s mod</color></b>' % (self.mod,))
+        for tag in self.tags:
+            body.append('MODULE { name = %s }' % (tag,))
+        return """\
+@PART[%s]:FOR[xxxRP0]
+{
+%s
+}
+""" % (self.name, '\n'.join('\t' + line for line in body))
+    def make_identical(self):
+        ip = [self] + self.identical_parts
+        if self.identical_to:
+            ip = [self.identical_to] + self.identical_to.identical_parts
+        return """\
+@PART[%s]:FOR[xxxRP0]
+{
+\t%%identicalParts = %s
+}""" % (self.name, ','.join(map(str, ip)))
     def __str__(self):
         return self.name
