@@ -59,15 +59,52 @@ class EngineConfig(object):
         self.year = year
         self.category = category
         self.description = description
+        self.upgrade = False
+        self.for_engine = None
     @property
     def tech(self):
         if self.category:
             return self.category.tech(self.year)
         return unlockParts
+    def make_tree(self):
+        body = ['%%techRequired = %s' % (self.tech,)]
+        if self.cost is not None:
+            body.append('%%cost = %d' % (self.cost,))
+        ## these entryCosts actually go in ECM-Engines.cfg
+        #if self.entry_cost is not None:
+        #    if isinstance(self.entry_cost, tuple):
+        #        body.append('%%entryCost = %s' % map(str, self.entry_cost))
+        #    else:
+        #        body.append('%%entryCost = %d' % (self.entry_cost,))
+        if self.description:
+            body.append('%%description = %s' % (self.description,))
+        if self.upgrade:
+            body.append('*@PARTUPGRADE[RFUpgrade_%s]/deleteme -= 1' % (self.name,))
+        return """\t\t@CONFIG[%s]
+\t\t{
+%s
+\t\t}""" % (self.name, '\n'.join('\t\t\t' + line for line in body))
+    def make_upgrade(self):
+        body = ['name = RFUpgrade_%s' % (self.name,),
+                'partIcon = RO-H1-RS27 // FIXME Once we get dedicated model',
+                'techRequired = %s' % (self.tech,),
+                'entryCost = 0',
+                'cost = 0',
+                'basicInfo = Engine Performance Upgrade',
+                'manufacturer = Engine Upgrade',
+                'deleteme = 1']
+        if self.for_engine:
+            body.append('title = %s Engine Upgrade: %s Config' % (self.for_engine.title, self.name))
+            body.append('description = The %s Engine now supports the AJ10-118 configuration for increased performance. Unlock it in the VAB/SPH through the engine configs interface.%s' % (self.for_engine.title, '\\n\\n' + self.description if self.description else ''))
+        else:
+            body.append('title = (Unused) Engine Upgrade: %s Config' % (self.name,))
+            body.append('description = (Unused)%s' % ('\\n\\n' + self.description if self.description else '',))
+        return "PARTUPGRADE\n{\n%s\n}" % ('\n'.join('\t' + line for line in body),)
     def __str__(self):
         return self.name
 
 AllParts = [] # Later we can make this a magic object capable of doing indexing for us, but a list will do for now
+AllConfigs = set()
 
 class KPart(object):
     def __init__(self, name, title, description, cost, entry_cost, mod=None, year=0, category=None, is_conf=NoConf, engine_configs=[], ecms=[], tags=[]):
@@ -86,8 +123,12 @@ class KPart(object):
         self.costed = is_conf.costed
         self.engine_configs = engine_configs
         if engine_configs:
+            AllConfigs.update(engine_configs)
             for i,ec in enumerate(engine_configs):
-                ec.upgrade = bool(i)
+                if ec.for_engine is None:
+                    ec.for_engine = self
+                if i:
+                    ec.upgrade = True
         self.upgrades = []
         self.ecms = ecms
         self.tags = tags
