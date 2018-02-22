@@ -129,7 +129,6 @@ class KPart(object):
                     ec.for_engine = self
                 if i:
                     ec.upgrade = True
-        self.upgrades = []
         self.ecms = ecms
         self.tags = tags
         for tag in tags:
