@@ -16,10 +16,10 @@ def make_tree_engines():
     return autogen_warning + """
 @PART[*]:HAS[@MODULE[ModuleEngineConfigs]]:BEFORE[RealismOverhaulEnginesPost]
 {
-	@MODULE[ModuleEngineConfigs],*
-	{
+\t@MODULE[ModuleEngineConfigs],*
+\t{
 %s
-	}
+\t}
 }
 
 /* Part Upgrades begin here */
@@ -31,9 +31,22 @@ def make_ecm_engines():
     ecms = '\n'.join(config.make_ecm() for config in kpart.AllConfigs)
     return autogen_warning + """
 //******************************************************************************
-//  ENTRY COST MODIFIERS
-//	These are the engine configs
+//\tENTRY COST MODIFIERS
+//\tThese are the engine configs
 //******************************************************************************
+@ENTRYCOSTMODS:FOR[xxxRP-0]
+{
+%s
+}
+""" % (ecms,)
+
+def make_ecm_parts():
+    ecms = '\n'.join(part.make_ecm() for part in kpart.AllParts if part.ecms)
+    return autogen_warning + """
+//*****************************************************************************
+//\tENTRY COST MODIFIERS
+//\tThese are the actual parts with the tags attached
+//*****************************************************************************
 @ENTRYCOSTMODS:FOR[xxxRP-0]
 {
 %s
@@ -54,3 +67,4 @@ if __name__ == '__main__':
     print make_tree_engines()
     print make_ecm_engines()
     print make_identical_parts()
+    print make_ecm_parts()

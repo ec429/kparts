@@ -147,6 +147,9 @@ class KPart(object):
              'year': self.year,
              'category': self.category,
              'is_conf': IsConf(self.ro, self.rp0, self.costed),
+             'engine_configs': self.engine_configs,
+             'ecms': self.ecms,
+             'tags': self.tags,
              }
         k.update(kwargs)
         new = self.__class__(name, **k)
@@ -185,5 +188,7 @@ class KPart(object):
 {
 \t%%identicalParts = %s
 }""" % (self.name, ','.join(map(str, ip)))
+    def make_ecm(self):
+        return '\t%s = %s' % (self.name, ', '.join(map(str, self.ecms)))
     def __str__(self):
         return self.name
