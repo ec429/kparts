@@ -2,15 +2,18 @@
 
 from kpart import *
 
-Taerobee         = KMod("Taerobee") # These will probably need to live in a central file of their own & be imported into these parts files
-StockRO          = KMod("Stock (RO Config)")
-RO_Extended      = KMod("RO-Extended")
-SXT              = KMod("SXT")
+# These will probably need to live in a central file of their own & be imported into these parts files
 BDB              = KMod("Bluedog DB")
-SSTU_RO_Addition = KMod("SSTU (RO Addition)")
+FASA             = KMod("FASA")
 RealEngines      = KMod("RealEngines")
+RO_Extended      = KMod("RO-Extended")
+StockRO          = KMod("Stock (RO Config)")
+SSTU_RO_Addition = KMod("SSTU (RO Addition)")
+SXT              = KMod("SXT")
+Taerobee         = KMod("Taerobee")
 VSR              = KMod("Ven Stock Revamp")
 
+# The same might go for these tags
 LqdTurbo = KTag("ModuleTagEngineLiquidTurbo")
 LqdPF    = KTag("ModuleTagEngineLiquidPF")
 Toxic    = KTag("ModuleTagToxic")
@@ -48,6 +51,20 @@ Bumper_Engine = KPart("Bumper_Engine", "A-4", "Thiel Lox/Alcohol rocket engine. 
                 is_conf=RP0Conf, engine_configs=[A4Config, A9Config],
                 ecms=['A-4'], tags=[LqdTurbo])
 Bumper_Engine_Unclad = Bumper_Engine.clone("Bumper_Engine_Unclad")
+
+# A-6/Redstone
+A6Config = EngineConfig("A-6", 0, (3000, 'Navaho-PhaseIII-TP'), year=1952, category=Orbital, description="The production version of the NAA75-110 engine as used on Redstone and the Mercury-Redstone Launch Vehicle.")
+A7Config = EngineConfig("A-7", 200, (5000, 'HydyneFuel'), year=1956, category=Orbital, description="NAA75-110 using Hydyne fuel for increased thrust and specific impulse. Used on the Redstone-derivative Jupiter-C sounding rocket and Juno I launch vehicle.")
+bluedog_redstone = KPart("bluedog_redstone", "NAA-75-110 A-Series", "Used on the Redstone missile.  Designed for Ethanol/LOx (A-6) (1.5 O/F Ratio), it was later adapted to burn Hydyne/LOx (A-7) (1.73 O/F Ratio)(higher performance (12%) yet more toxic) for use in Jupiter C / Juno I.  When Redstone MRLV was adapted from Jupiter C for manned use the A7 was switched back to Ethanol, accepting slightly lower performance for lack of toxicity. Thrust Vector Control was provided by carbon thrust vanes (add the Redstone Fin / Thrust vane part in 4x symmetry), and additional attitude control was provided by actuating fins. Mass includes thrust frame. Diameter: [1.77 m]. Plume configured by RealPlume.",
+                400, 16000,
+                mod=BDB, year=1952, category=Orbital,
+                is_conf=RP0Conf, engine_configs=[A6Config, A7Config],
+                ecms=['A-6'], tags=[LqdTurbo])
+FASA_Mercury_Redstone_Eng = bluedog_redstone.clone("FASA_Mercury_Redstone_Eng", mod=FASA, year=1955)
+# not an engine, but still in class Orbital for some reason
+FASAMercuryRedstoneFin = KPart("FASAMercuryRedstoneFin", "A-7 Fin / Thrust Vane", "The Redstone / Jupiter-C / Juno engine could not gimbal.  Instead TVC was obtained by use of carbon thrust vanes. Apply in 4x symmetry to A7 engine unit.",
+                5, 100,
+                mod=FASA, year=1955, category=Orbital, is_conf=RP0Conf)
 
 # Aerobee
 WAC_Corporal = EngineConfig("WAC-Corporal", 0, 1, year=0, category=Orbital)
