@@ -3,6 +3,7 @@
 import kpart
 import engines
 import ion_engines
+import rftech
 
 autogen_warning = """\
 /* This file is auto-generated from kparts, do not edit directly.
@@ -61,6 +62,21 @@ def make_identical_parts():
     iparts = '\n'.join(part.make_identical() for part in kpart.AllParts if part.identical_parts or part.identical_to)
     return "%s\n%s\n" % (autogen_warning, iparts)
 
+def make_rftech_levels():
+    tls = '\n'.join(tl.make_tree() for tl in kpart.AllRFTLs)
+    ups = '\n'.join(tl.make_upgrade() for tl in kpart.AllRFTLs)
+    return autogen_warning + """
+@RFSETTINGS:FOR[RP-0]
+{
+\t@RF_TECHLEVELS
+\t{
+%s
+\t}
+}
+
+%s
+""" % (tls, ups)
+
 if __name__ == '__main__':
     # Just here for testing.  We'll do something more useful with the data later.
     print make_tree_parts()
@@ -68,3 +84,4 @@ if __name__ == '__main__':
     print make_ecm_engines()
     print make_identical_parts()
     print make_ecm_parts()
+    print make_rftech_levels()

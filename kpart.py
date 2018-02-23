@@ -51,6 +51,47 @@ ROConf = IsConf(True, False, False)
 RP0NoCost = IsConf(True, True, False)
 RP0Conf = IsConf(True, True, True)
 
+AllParts = [] # Later we can make this a magic object capable of doing indexing for us, but a list will do for now
+AllConfigs = set()
+AllRFTLs = []
+
+class RFTechFamily(object):
+    def __init__(self, name, category, eng_type, title, icon='RO-H1-RS27', desc=None):
+        self.name = name
+        self.category = category
+        self.eng_type = eng_type
+        self.title = title
+        self.icon = icon
+        self.desc = desc or title
+    def __str__(self):
+        return self.name
+
+class RFTechLevel(object):
+    def __init__(self, level, year, family):
+        self.level = level
+        self.year = year
+        self.family = family
+        assert family is not None
+        AllRFTLs.append(self)
+    @property
+    def tech(self):
+        if self.family.category:
+            return self.family.category.tech(self.year)
+        return unlockParts
+    def make_tree(self):
+        return "\t\t@ENGINETYPE,*:HAS[#name[%s]] { %%TLTECH%d = %s }" % (self.family.eng_type, self.level, self.tech)
+    def make_upgrade(self):
+        body = ['name = RFTech-%s-tltech%d' % (self.family.name, self.level),
+                'partIcon = %s' % (self.family.icon,),
+                'techRequired = %s' % (self.tech,),
+                'entryCost = 0',
+                'cost = 0',
+                'title = %s Real Fuels Technology Upgrade Level %d' % (self.family.title, self.level),
+                'basicInfo = This is an upgrade to the technology level of %s' % (self.family.desc,),
+                'manufacturer = Generic',
+                'description = This is an upgrade to the technology level of %s' % (self.family.desc,)]
+        return "PARTUPGRADE\n{\n%s\n}" % ('\n'.join('\t' + line for line in body),)
+
 class EngineConfig(object):
     def __init__(self, name, cost, entry_cost, year=0, category=None, description=None):
         self.name = name
@@ -102,9 +143,6 @@ class EngineConfig(object):
         return '\t%s = %s' % (self.name, ec)
     def __str__(self):
         return self.name
-
-AllParts = [] # Later we can make this a magic object capable of doing indexing for us, but a list will do for now
-AllConfigs = set()
 
 class KPart(object):
     def __init__(self, name, title, description, cost, entry_cost, mod=None, year=0, category=None, is_conf=NoConf, engine_configs=[], ecms=[], tags=[]):
