@@ -130,7 +130,7 @@ class EngineConfig(object):
                 'deleteme = 1']
         if self.for_engine:
             body.append('title = %s Engine Upgrade: %s Config' % (self.for_engine.title, self.name))
-            body.append('description = The %s Engine now supports the AJ10-118 configuration for increased performance. Unlock it in the VAB/SPH through the engine configs interface.%s' % (self.for_engine.title, '\\n\\n' + self.description if self.description else ''))
+            body.append('description = The %s Engine now supports the %s configuration for increased performance. Unlock it in the VAB/SPH through the engine configs interface.%s' % (self.for_engine.title, self.name, '\\n\\n' + self.description if self.description else ''))
         else:
             body.append('title = (Unused) Engine Upgrade: %s Config' % (self.name,))
             body.append('description = (Unused)%s' % ('\\n\\n' + self.description if self.description else '',))
