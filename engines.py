@@ -113,18 +113,22 @@ SXTBlackAdder = KPart("SXTBlackAdder", "Gamma 8", "This was an 8 chamber develop
                 ecms=['Gamma-8'], tags=[LqdTurbo])
 
 # LR79 (Thor)
-S3Config = EngineConfig("S-3", 0, (10000, 'Navaho-TP'), year=1956, category=Orbital, description="Development version of the LR79 engine. Used on Thor R&D missiles.")
+S3Config  = EngineConfig("S-3",         0, (10000, 'Navaho-TP'), year=1956, category=Orbital, description="Development version of the LR79 engine. Used on Thor R&D missiles.")
+S3DConfig = EngineConfig("S-3D",        1, (2000, 'Navaho-TP-1958', 'S-3'),  year=1958, category=Orbital, description="Production version of the LR79 engine, used on Thor and Jupiter.")
+LR79NA9   = EngineConfig("LR79-NA-9",  30, (2000, 'Navaho-TP-1959', 'S-3D'), year=1959, category=Orbital, description="MB-3-1 on Thor.")
+LR79NA11  = EngineConfig("LR79-NA-11", 40, (2000, 'Navaho-TP-1960', 'LR79-NA-9'),  year=1960, category=Orbital, description="MB-3-2 on Thor.")
+LR79NA13  = EngineConfig("LR79-NA-13", 50, (2000, 'Navaho-TP-1962', 'LR79-NA-11'), year=1963, category=Orbital, description="MB-3-3 on Thor.")
 FASADeltaMB3LFE = KPart("FASADeltaMB3LFE", "LR79 Series", "Long-lasting US Kerolox gas-generator booster engine. The same components and broadly the same performance as the LR89, the LR79 (also known as S-3D in Jupiter / Juno II) powered Jupiter, Thor, and Thor-Delta (Delta) rockets. Diameter: [1.53 m]. Plume configured by RealPlume.",
                 300, 13000,
                 mod=FASA, year=1956, category=Orbital,
-                is_conf=RP0Conf, engine_configs=[S3Config],
+                is_conf=RP0Conf, engine_configs=[S3Config, S3DConfig, LR79NA9, LR79NA11, LR79NA13],
                 ecms=['S-3'], tags=[LqdTurbo])
 liquidEngine1_2 = FASADeltaMB3LFE.clone("liquidEngine1-2", mod=StockRO)
 bluedog_Juno_EngineS3D = FASADeltaMB3LFE.clone("bluedog_Juno_EngineS3D", title="S-3D Liquid Engine", mod=BDB)
 bluedog_thorEngine = FASADeltaMB3LFE.clone("bluedog_thorEngine", title="Thor/Delta LR-79", mod=BDB)
 SHIP_LR_71 = FASADeltaMB3LFE.clone("SHIP_LR_71", title="LR-79 Series", description="Engine used in a variety of launch vehicles, most notibly the Thor/Delta", mod=RO_Extended, year=1957)
 rn_lr79 = FASADeltaMB3LFE.clone("rn_lr79", title="LR79/MB-3 Rocket Engine", description="A Lox/Kerosene rocket engine used on Thor-Able and early Delta launch vehicles. Plume configured by RealPlume.", mod=RNUSRockets, year=1958, engine_configs=[], ecms=['S-3D'])
-rn_s3 = rn_lr79.clone("rn_s3", title="S-3", description="A Lox/Kerosene rocket engine used on Juno II and Saturn A-2. Plume configured by RealPlume.", ecms=[]) # should this have S-3 ecm?
+rn_s3 = rn_lr79.clone("rn_s3", title="S-3", description="A Lox/Kerosene rocket engine used on Juno II and Saturn A-2. Plume configured by RealPlume.", ecms=[], not_identical=True) # XXX should this have S-3 ecm?
 
 ## LR79 Turbopump Exhaust.
 rn_lr79_tp = KPart("rn_lr79_tp", "LR79/MB-3 Turbopump Exhaust Nozzle", "Turbopump exhaust for the Thor-Able/Delta launch vehicles. Plume configured by RealPlume.",
@@ -132,24 +136,32 @@ rn_lr79_tp = KPart("rn_lr79_tp", "LR79/MB-3 Turbopump Exhaust Nozzle", "Turbopum
                 mod=RNUSRockets, year=1958, category=Orbital,
                 is_conf=RP0Conf,
                 ecms=['S-3D'], tags=[LqdTurbo])
-rn_s3_vernier = rn_lr79_tp.clone("rn_s3_vernier", title="S-3 Turbopump Exhaust Nozzle", description="A Lox/Kerosene vernier rocket engine used on the S-3 engine for Juno II and Saturn A-2. Plume configured by RealPlume.", cost=50, ecms=[]) # should this have S-3 ecm?
+rn_s3_vernier = rn_lr79_tp.clone("rn_s3_vernier", title="S-3 Turbopump Exhaust Nozzle", description="A Lox/Kerosene vernier rocket engine used on the S-3 engine for Juno II and Saturn A-2. Plume configured by RealPlume.", cost=50, ecms=[], not_identical=True) # XXX should this have S-3 ecm?
 
 # LR89 (Atlas booster)
-LR43NA3 = EngineConfig("LR43-NA-3", 0, (12000, 'Navaho-TP'), year=1956, category=Orbital, description="First version of the LR89 booster for Atlas.")
+LR43NA3  = EngineConfig("LR43-NA-3",    0, (12000, 'Navaho-TP'), year=1956, category=Orbital, description="First version of the LR89 booster for Atlas.")
+LR89NA3  = EngineConfig("LR89-NA-3",    1, (2500, 'Navaho-TP-1958', 'LR43-NA-3'), year=1958, category=Orbital)
+LR89NA5  = EngineConfig("LR89-NA-5",   15, (2500, 'Navaho-TP-1960', 'LR89-NA-3'), year=1960, category=Orbital)
+LR89NA6  = EngineConfig("LR89-NA-6",   25, (2500, 'Navaho-TP-1962', 'LR89-NA-5'), year=1962, category=Orbital)
+LR89NA71 = EngineConfig("LR89-NA-7.1", 40, (1000, 'MA-5-System',    'LR89-NA-6'), year=1965, category=Orbital)
+LR89NA72 = EngineConfig("LR89-NA-7.2", 50, (1000, 'MA-5-System-I',  'LR89-NA-7.1'), year=1967, category=Orbital)
+RS56OBA  = EngineConfig("RS-56-OBA",    8, (5000, 'H1-TP',          'LR89-NA-7.2'), year=1990, category=Orbital, description="Upgraded using H-1/RS-27 components.")
 bluedog_Atlas_LR89 = KPart("bluedog_Atlas_LR89", "LR89 Series", "Kerolox gas-generator engine that served as booster for Atlas. Late model LR89s were upgraded with RS-27 components for higher efficiency. Very similar to LR79 (this was the pure-booster variant). Diameter: [1.0 m]. Plume configured by RealPlume.",
                 300, 6000,
                 mod=BDB, year=1956, category=Orbital,
-                is_conf=RP0Conf, engine_configs=[LR43NA3],
+                is_conf=RP0Conf, engine_configs=[LR43NA3, LR89NA3, LR89NA5, LR89NA6, LR89NA71, LR89NA72, RS56OBA],
                 ecms=['LR43-NA-3'], tags=[LqdTurbo])
 FASAMercuryAtlasEngBooster = bluedog_Atlas_LR89.clone("FASAMercuryAtlasEngBooster", mod=FASA)
 RO_LR_89 = bluedog_Atlas_LR89.clone("RO-LR-89", mod=StockRO)
 
 # LR101 (Atlas/Thor vernier)
-LR101NA3 = EngineConfig("LR101-NA-3", 0, (8000, 'Navaho-PhaseIII-TP'), year=1956, category=Orbital)
+LR101NA3  = EngineConfig("LR101-NA-3",  0, (8000, 'Navaho-PhaseIII-TP'), year=1956, category=Orbital)
+LR101NA11 = EngineConfig("LR101-NA-11", 1, (1000, 'Navaho-TP-1960', 'LR101-NA-3'), year=1962, category=Orbital)
+LR101NA15 = EngineConfig("LR101-NA-15",-5, (1000, 'RS27-System',    'LR101-NA-3'), year=1990, category=Orbital)
 bluedog_Atlas_LR101_Radial = KPart("bluedog_Atlas_LR101_Radial", "LR101 Series", "Pump or pressure-fed kerolox vernier engine. Used for attitude control and final velocity adjustment in the MA-x system (2x LR89 + LR105 + 2x LR101) on Atlas, and MB-x system (LR79 or RS-27 + 2xLR101) on Thor-Able / Thor-Agena / Thor-Delta / Delta. Plume configured by RealPlume.",
                 15, 1000,
                 mod=BDB, year=1956, category=Orbital,
-                is_conf=RP0Conf, engine_configs=[LR101NA3],
+                is_conf=RP0Conf, engine_configs=[LR101NA3, LR101NA11, LR101NA15],
                 ecms=['LR101-NA-3'], tags=[LqdTurbo])
 FASAMercuryAtlasVernierEngine = bluedog_Atlas_LR101_Radial.clone("FASAMercuryAtlasVernierEngine", mod=FASA)
 RSBengineLR101 = bluedog_Atlas_LR101_Radial.clone("RSBengineLR101", mod=RSB)
@@ -157,11 +169,17 @@ radialEngineMini = bluedog_Atlas_LR101_Radial.clone("radialEngineMini", mod=Stoc
 rn_lr79_vernier = bluedog_Atlas_LR101_Radial.clone("rn_lr79_vernier", title="LR101 Thor Vernier", description="Pump or pressure-fed kerolox vernier engine. Used for attitude control and final velocity adjustment in the MB-x system (LR79 or RS-27 + 2xLR101) on Thor-Able / Thor-Agena / Thor-Delta / Delta. Plume configured by RealPlume.", mod=RNUSRockets, year=1958)
 
 # LR105 (Atlas sustainer)
-LR43NA5 = EngineConfig("LR43-NA-5", 0, (15000, 'Navaho-TP'), year=1956, category=Orbital, description="First version of the LR105 sustainer for Atlas.")
+LR43NA5   = EngineConfig("LR43-NA-5",     0, (15000, 'Navaho-TP'), year=1956, category=Orbital, description="First version of the LR105 sustainer for Atlas.")
+LR105NA3  = EngineConfig("LR105-NA-3",    1, (3000, 'Navaho-TP-1958', 'LR43-NA-5'),  year=1958, category=Orbital)
+LR105NA5  = EngineConfig("LR105-NA-5",   20, (3000, 'Navaho-TP-1960', 'LR105-NA-3'), year=1960, category=Orbital)
+LR105NA6  = EngineConfig("LR105-NA-6",   35, (3000, 'Navaho-TP-1962', 'LR105-NA-5'), year=1962, category=Orbital)
+LR105NA71 = EngineConfig("LR105-NA-7.1", 60, (1200, 'MA-5-System',    'LR105-NA-6'), year=1965, category=Orbital)
+LR105NA72 = EngineConfig("LR105-NA-7.2", 80, (1200, 'MA-5-System-I',  'LR105-NA-7.1'), year=1967, category=Orbital)
+RS56OSA   = EngineConfig("RS-56-OSA",    10, (6000, 'H1-TP',          'LR105-NA-7.2'), year=1990, category=Orbital, description="Upgraded using H-1/RS-27 components.")
 bluedog_Atlas_LR105 = KPart("bluedog_Atlas_LR105", "LR105 Series", "Kerolox gas-generator sustainer engine used in the Atlas launch vehicle. It, like the Atlas's booster engines (LR89s) are lit on the ground, but after a bit over 2 minutes' flight the boosters are dropped and the Atlas core continues to orbit under the power of the sustainer engine (and the verniers for roll control and final adjustment). The final configuration of the LR105 (like the LR89) uses RS-27 components for increased performance. As a sustainer engine, the LR105 has relatively poor sea level specific impulse compared to most boosters, but somewhat better vacuum specific impulse--though the difference in both is nowhere near as pronounced as when comparing a booster to an upper stage engine. Diameter: [1.5 m]. Plume configured by RealPlume.",
                 275, 5500,
                 mod=BDB, year=1956, category=Orbital,
-                is_conf=RP0Conf, engine_configs=[LR43NA5],
+                is_conf=RP0Conf, engine_configs=[LR43NA5, LR105NA3, LR105NA5, LR105NA6, LR105NA71, LR105NA72, RS56OSA],
                 ecms=['LR43-NA-3'], tags=[LqdTurbo])
 FASAMercuryAtlasEng = bluedog_Atlas_LR105.clone("FASAMercuryAtlasEng", mod=FASA)
 liquidEngine = bluedog_Atlas_LR105.clone("liquidEngine", mod=StockRO)
