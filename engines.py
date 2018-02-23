@@ -28,26 +28,8 @@ Orbital.add_tech(basicRocketryRP0)
 orbitalRocketry1956 = KTech("orbitalRocketry1956",  1956)
 Orbital.add_tech(orbitalRocketry1956)
 
-Orbital.add_tech(KTech("orbitalRocketry1958",       1958))
-Orbital.add_tech(KTech("orbitalRocketry1959",       1959))
-Orbital.add_tech(KTech("orbitalRocketry1960",       1960))
-Orbital.add_tech(KTech("orbitalRocketry1961",       1961))
-Orbital.add_tech(KTech("orbitalRocketry1962",       1962))
-Orbital.add_tech(KTech("orbitalRocketry1963",       1963))
-Orbital.add_tech(KTech("orbitalRocketry1964",       1964))
-Orbital.add_tech(KTech("orbitalRocketry1965",       1965))
-Orbital.add_tech(KTech("orbitalRocketry1966",       1966))
-Orbital.add_tech(KTech("orbitalRocketry1967",       1967))
-Orbital.add_tech(KTech("orbitalRocketry1970",       1970))
-Orbital.add_tech(KTech("orbitalRocketry1972",       1972))
-Orbital.add_tech(KTech("orbitalRocketry1976",       1976))
-Orbital.add_tech(KTech("orbitalRocketry1981",       1981))
-Orbital.add_tech(KTech("orbitalRocketry1986",       1986))
-Orbital.add_tech(KTech("orbitalRocketry1992",       1992))
-Orbital.add_tech(KTech("orbitalRocketry1998",       1998))
-Orbital.add_tech(KTech("orbitalRocketry2004",       2004))
-Orbital.add_tech(KTech("orbitalRocketry2009",       2009))
-Orbital.add_tech(KTech("orbitalRocketry2014",       2014))
+for year in [1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1970, 1972, 1976, 1981, 1986, 1992, 1998, 2004, 2009, 2014]:
+    Orbital.add_tech(KTech("orbitalRocketry%d" % (year,), year))
 Orbital.add_tech(KTech("orbitalRocketryNF",         2019))
 Orbital.add_tech(KTech("colonization2051Orbital",   2051))
 Orbital.add_tech(KTech("colonization2100Orbital",   2100))
@@ -78,8 +60,8 @@ taerobee_aerobee = ROAerobeeSustainer.clone("taerobee_aerobee",
                 mod=Taerobee, year=1951)
 
 # AJ10_Early
-AJ10_37 = EngineConfig("AJ10-37", 0, (8000, 'AJ10-27'), year=1956, description="Used on Vanguard second stage.")
-AJ10_42 = EngineConfig("AJ10-42", -15, (2000, 'AJ10-37'), year=1958, description="Used on Able I")
+AJ10_37 = EngineConfig("AJ10-37", 0, (8000, 'AJ10-27'), year=1956, category=Orbital, description="Used on Vanguard second stage.")
+AJ10_42 = EngineConfig("AJ10-42", -15, (2000, 'AJ10-37'), year=1958, category=Orbital, description="Used on Able I")
 # ... TODO more ...
 SXTAJ10 = KPart("SXTAJ10", "AJ10 Series (Early)", "Small pressure-fed hypergolic upper stage engine. Derivative of the first US liquid rocket engine, the AJ10 series is perhaps the longest-lived of any engine series, a part of the US's first satellite launch vehicle, Vanguard, the Apollo CSM, and even one projected Orion service module. This is the original Vanguard second stage / Able / Delta configuration, without restart capability. Plume configured by RealPlume.",
                 150, 3000,
