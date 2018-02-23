@@ -192,7 +192,9 @@ class KPart(object):
         new = self.__class__(name, **k)
         if not not_identical:
             new.identical_to = self
-            self.identical_parts.append(new)
+            while new.identical_to.identical_to:
+                new.identical_to = new.identical_to.identical_to
+            new.identical_to.identical_parts.append(new)
         return new
     @property
     def tech(self):
