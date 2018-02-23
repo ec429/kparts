@@ -11,9 +11,12 @@ autogen_warning = """\
  */
 """
 
+kpart.AllParts.sort(key=lambda p: p.name.upper())
+SortedConfigs = sorted(kpart.AllConfigs, key=lambda c: c.name.upper())
+
 def make_tree_engines():
-    mecs = '\n\n'.join(config.make_tree() for config in kpart.AllConfigs)
-    ups = '\n'.join(config.make_upgrade() for config in kpart.AllConfigs if config.upgrade)
+    mecs = '\n\n'.join(config.make_tree() for config in SortedConfigs)
+    ups = '\n'.join(config.make_upgrade() for config in SortedConfigs if config.upgrade)
     return autogen_warning + """
 @PART[*]:HAS[@MODULE[ModuleEngineConfigs]]:BEFORE[RealismOverhaulEnginesPost]
 {
@@ -29,7 +32,7 @@ def make_tree_engines():
 """ % (mecs, ups)
 
 def make_ecm_engines():
-    ecms = '\n'.join(config.make_ecm() for config in kpart.AllConfigs)
+    ecms = '\n'.join(config.make_ecm() for config in SortedConfigs)
     return autogen_warning + """
 //******************************************************************************
 //\tENTRY COST MODIFIERS
