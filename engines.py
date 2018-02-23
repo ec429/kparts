@@ -8,6 +8,8 @@ RO_Extended      = KMod("RO-Extended")
 SXT              = KMod("SXT")
 BDB              = KMod("Bluedog DB")
 SSTU_RO_Addition = KMod("SSTU (RO Addition)")
+RealEngines      = KMod("RealEngines")
+VSR              = KMod("Ven Stock Revamp")
 
 LqdTurbo = KTag("ModuleTagEngineLiquidTurbo")
 LqdPF    = KTag("ModuleTagEngineLiquidPF")
@@ -62,6 +64,7 @@ taerobee_aerobee = ROAerobeeSustainer.clone("taerobee_aerobee",
 # AJ10_Early
 AJ10_37 = EngineConfig("AJ10-37", 0, (8000, 'AJ10-27'), year=1956, category=Orbital, description="Used on Vanguard second stage.")
 AJ10_42 = EngineConfig("AJ10-42", -15, (2000, 'AJ10-37'), year=1958, category=Orbital, description="Used on Able I")
+AJ10_118 = EngineConfig("AJ10-118", -30, (1000, 'AJ10-142'), year=1962, category=Orbital, description="Used on Delta A")
 # ... TODO more ...
 SXTAJ10 = KPart("SXTAJ10", "AJ10 Series (Early)", "Small pressure-fed hypergolic upper stage engine. Derivative of the first US liquid rocket engine, the AJ10 series is perhaps the longest-lived of any engine series, a part of the US's first satellite launch vehicle, Vanguard, the Apollo CSM, and even one projected Orion service module. This is the original Vanguard second stage / Able / Delta configuration, without restart capability. Plume configured by RealPlume.",
                 150, 3000,
@@ -75,3 +78,15 @@ SHIP_AJ_10_101_104 = KPart("SHIP_AJ_10_101_104", "AJ-10 101/104", "Flown on the 
                 None, None,
                 mod=RO_Extended, year=1959, category=Orbital,
                 is_conf=ROConf, tags=[LqdPF, Toxic])
+
+# RD-100 series
+RD100Config = EngineConfig("RD-100", 0, 0, year=0, category=Orbital)
+RD102 = EngineConfig("RD-102", 120, (10000, 'RD102-TP'), year=1950, category=Orbital)
+RD103 = EngineConfig("RD-103", 300, (7000, 'RD-102', 'RD-103TP'), year=1952, category=Orbital)
+RD103M = EngineConfig("RD-103M", 350, (5000, 'RD-103'), year=1956, category=Orbital)
+rd100 = KPart("rd100", "RD-100 Series (Early)", "The RD-100 engine series were the first large scale Ethalox Russian liquid propellant rocket engines ever developed and fired. The original RD-100 engine was a 1:1 copy of the German Model 39 engine (used on the A-4 ballistic missile), with later variants (RD-101 and RD-103/M) featuring ever increasing performance to satisfy the needs of the larger R-2 and R-5 IRBMs. Diameter: 1.65 m. Plume configured by RealPlume.",
+                150, 1,
+                mod=RealEngines, year=0, category=Orbital,
+                is_conf=RP0Conf, engine_configs=[RD100Config, RD102, RD103, RD103M],
+                ecms=['RD-100'], tags=[LqdTurbo])
+LVT15 = rd100.clone("LVT15", mod=VSR)
