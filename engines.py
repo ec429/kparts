@@ -96,6 +96,20 @@ SHIP_AJ_10_101_104 = KPart("SHIP_AJ_10_101_104", "AJ-10 101/104", "Flown on the 
                 mod=RO_Extended, year=1959, category=Orbital,
                 is_conf=ROConf, tags=[LqdPF, Toxic])
 
+# Gamma family (British HTP/kero, Black Arrow)
+Gamma2Config = EngineConfig("Gamma-2", 0, (4000, 'GammaTP'), year=1956, category=Orbital)
+SXTBlackAdder2 = KPart("SXTBlackAdder2", "Gamma 2", "A two chamber version of Gamma, used for the second stage of the Black Arrow satellite launch vehicle. As the only Gamma not required to operate at sea level, the nozzles were extended to allow better expansion. Diameter: [1.37 m]. Plume configured by RealPlume.",
+                250, 4000,
+                mod=SXT, year=1956, category=Orbital,
+                is_conf=RP0Conf, engine_configs=[Gamma2Config],
+                ecms=['Gamma-2'], tags=[LqdTurbo])
+Gamma8Config = EngineConfig("Gamma-8", 0, (5000, 'GammaTP'), year=1956, category=Orbital)
+SXTBlackAdder = KPart("SXTBlackAdder", "Gamma 8", "This was an 8 chamber development of Gamma, used for the first stage of the Black Arrow satellite launch vehicle. Gamma thrust chambers were mounted in pairs radially, each pair on a one-axis tangential gimbal. Collective movement gave roll control, differential movement pitch. Diameter: [1.98 m]. Plume configured by RealPlume.",
+                300, 10000,
+                mod=SXT, year=1956, category=Orbital,
+                is_conf=RP0Conf, engine_configs=[Gamma8Config],
+                ecms=['Gamma-8'], tags=[LqdTurbo])
+
 # RD-100 series
 RD100Config = EngineConfig("RD-100", 0, 0, year=0, category=Orbital)
 RD102 = EngineConfig("RD-102", 120, (10000, 'RD102-TP'), year=1950, category=Orbital)
